@@ -1,9 +1,9 @@
 # Zendesk-Tickets-as-a-collection
 
-Quick start: 
+# Quick start: 
 Edit zendesk_tickets.py and ensure lines 7-14 are correctly populated.
 
-Requirements:
+# Requirements:
 
 You are using orgs within Zendesk.
 You have a field on the org in Zendesk which matches to a field within your Totango attributes.
@@ -12,7 +12,7 @@ You have admin rights to Totango
 You have an AWS bucket with an AWS_key / AWS_secret
 You have the ability to read and write to this bucket
 
-High level overview:
+# High level overview:
 
 This code is meant to run on a scheduled timeline.
 
