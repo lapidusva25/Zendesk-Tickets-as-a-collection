@@ -2,20 +2,23 @@ import pandas as pd
 import boto3
 from io import StringIO
 from inspect import getmembers
+import io
 
 
 
 
-
-def GetS3File(filename,key,secret,bucket):
+def GetS3File(path_filename,key,secret,bucket):
 
     
     s3 = boto3.client('s3', aws_access_key_id=key, aws_secret_access_key=secret)
-    obj = s3.get_object(Bucket=bucket, Key=filename)
-    dataframe = pd.read_csv(obj['Body'], dtype=str, error_bad_lines = False, encoding='latin1')
+    obj = s3.get_object(Bucket=bucket, Key=path_filename)
+    print('objBody:',obj['Body'])
+
+    dataframe = pd.read_csv(io.BytesIO(obj['Body'].read()), dtype=str, error_bad_lines = False, encoding='latin1')
+    
     return(dataframe)
 
-def FileOutput(df,filename,key,secret,bucket,index):
+def FileOutput(df,path_filename,key,secret,bucket,index):
     #usage:
     #key = OUTPATH +region_name + '_devices(collection(AccountID_CollectionID)).csv'
     #FileOutput(df, key)
@@ -23,5 +26,5 @@ def FileOutput(df,filename,key,secret,bucket,index):
     s3_resource = boto3.resource('s3', aws_access_key_id=key, aws_secret_access_key=secret)
     csv_buffer = StringIO()
     df.to_csv(csv_buffer, index=index, header=True)
-    s3_resource.Object(bucket,filename).put(Body=csv_buffer.getvalue())
+    s3_resource.Object(bucket,path_filename).put(Body=csv_buffer.getvalue())
 
